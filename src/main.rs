@@ -875,8 +875,17 @@ fn simulate_race(drivers: &Vec<Driver>, cars: &Vec<(String, Car)>) -> Vec<RaceRe
         );
     }
 
-    // Sort by race time (lower is better)
-    results.sort_by(|a, b| a.finish_time_seconds.cmp(&b.finish_time_seconds));
+    // First sort by DNF status (non-DNF first), then by finish time
+    results.sort_by(|a, b| {
+        match (a.dnf, b.dnf) {
+            // If both are DNF or both are not DNF, sort by time
+            (true, true) | (false, false) => a.finish_time_seconds.cmp(&b.finish_time_seconds),
+            // If a is DNF but b is not, b comes first
+            (true, false) => std::cmp::Ordering::Greater,
+            // If a is not DNF but b is, a comes first
+            (false, true) => std::cmp::Ordering::Less,
+        }
+    });
 
     // Update positions after sorting
     for (position, result) in results.iter_mut().enumerate() {
