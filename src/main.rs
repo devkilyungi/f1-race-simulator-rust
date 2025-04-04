@@ -897,68 +897,31 @@ fn simulate_race(drivers: &Vec<Driver>, cars: &Vec<(String, Car)>) -> Vec<RaceRe
 fn qualification_summary(results: &Vec<RaceResult>) {
     println!("\n🏁 Qualification Summary (Final Grid Order) 🏁");
 
-    // Q3 results (positions 1-10)
-    println!("\n--- Q3 Results ---");
-    for result in results.iter().take(10) {
-        if result.dnf {
-            println!(
-                "P{}: {} | {} | Time: {}s | DNF",
-                result.finish_position,
-                result.driver_name,
-                result.team_name,
-                result.finish_time_seconds
-            );
-        } else {
-            println!(
-                "P{}: {} | {} | Time: {}s",
-                result.finish_position,
-                result.driver_name,
-                result.team_name,
-                result.finish_time_seconds
-            );
-        }
-    }
+    // Define the sections with their titles and corresponding driver ranges
+    let sections = [
+        ("--- Q3 Results ---", 0..10),
+        ("--- Eliminated in Q2 ---", 10..15),
+        ("--- Eliminated in Q1 ---", 15..results.len()),
+    ];
 
-    // Q2 results (positions 11-15)
-    println!("\n--- Eliminated in Q2 ---");
-    for result in results.iter().skip(10).take(5) {
-        if result.dnf {
-            println!(
-                "P{}: {} | {} | Time: {}s | DNF",
-                result.finish_position,
-                result.driver_name,
-                result.team_name,
-                result.finish_time_seconds
-            );
-        } else {
-            println!(
-                "P{}: {} | {} | Time: {}s",
-                result.finish_position,
-                result.driver_name,
-                result.team_name,
-                result.finish_time_seconds
-            );
-        }
-    }
+    // Process each section
+    for (title, range) in sections.iter() {
+        println!("\n{}", title);
 
-    // Q1 results (positions 16-20)
-    println!("\n--- Eliminated in Q1 ---");
-    for result in results.iter().skip(15) {
-        if result.dnf {
+        // Get the drivers for this section
+        let section_drivers = results.iter().skip(range.start).take(range.end - range.start);
+
+        // Print each driver's info
+        for result in section_drivers {
+            let dnf_text = if result.dnf { " | DNF" } else { "" };
+
             println!(
-                "P{}: {} | {} | Time: {}s | DNF",
+                "P{}: {} | {} | Time: {}s{}",
                 result.finish_position,
                 result.driver_name,
                 result.team_name,
-                result.finish_time_seconds
-            );
-        } else {
-            println!(
-                "P{}: {} | {} | Time: {}s",
-                result.finish_position,
-                result.driver_name,
-                result.team_name,
-                result.finish_time_seconds
+                result.finish_time_seconds,
+                dnf_text
             );
         }
     }
