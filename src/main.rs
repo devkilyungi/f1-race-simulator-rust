@@ -713,21 +713,21 @@ fn main() {
     println!();
 
     // Simulate Free Practice sessions
-    println!();
+    println!("\n🏁 Free Practice 1 Summary 🏁");
     let fp1_results = simulate_practice_session(&drivers, &cars, "FP1");
 
     // println!();
     // println!("{:#?}", fp1_results);
     // println!();
 
-    println!();
+    println!("\n🏁 Free Practice 2 Summary 🏁");
     let fp2_results = simulate_practice_session(&drivers, &cars, "FP2");
 
     // println!();
     // println!("{:#?}", fp2_results);
     // println!();
 
-    println!();
+    println!("\n🏁 Free Practice 3 Summary 🏁");
     let fp3_results = simulate_practice_session(&drivers, &cars, "FP3");
 
     // println!();
@@ -735,19 +735,22 @@ fn main() {
     // println!();
 
     // Simulate Qualification
-    println!();
+    println!("\n🏁 Qualification Summary 🏁");
     let qualification_results = simulate_qualification(&drivers, &cars);
 
     // println!();
     // println!("{:#?}", qualification_results);
     // println!();
 
+    // Qualification summary in order
+    qualification_summary(&qualification_results);
+
     // Simulate Race Day
-    println!();
+    println!("\n🏁 Race Results Summary 🏁");
     let race_results = simulate_race(&drivers, &cars);
 
     // Give Race Weekend Summary
-    race_weekend_summary(race_results);
+    race_weekend_summary(&race_results);
 }
 
 fn simulate_practice_session(
@@ -895,7 +898,77 @@ fn simulate_race(drivers: &Vec<Driver>, cars: &Vec<(String, Car)>) -> Vec<RaceRe
     results
 }
 
-fn race_weekend_summary(results: Vec<RaceResult>) {
+fn qualification_summary(results: &Vec<RaceResult>) {
+    println!("\n🏁 Qualification Summary (Final Grid Order) 🏁");
+
+    // Q3 results (positions 1-10)
+    println!("\n--- Q3 Results ---");
+    for result in results.iter().take(10) {
+        if result.dnf {
+            println!(
+                "P{}: {} | {} | Time: {}s | DNF",
+                result.finish_position,
+                result.driver_name,
+                result.team_name,
+                result.finish_time_seconds
+            );
+        } else {
+            println!(
+                "P{}: {} | {} | Time: {}s",
+                result.finish_position,
+                result.driver_name,
+                result.team_name,
+                result.finish_time_seconds
+            );
+        }
+    }
+
+    // Q2 results (positions 11-15)
+    println!("\n--- Eliminated in Q2 ---");
+    for result in results.iter().skip(10).take(5) {
+        if result.dnf {
+            println!(
+                "P{}: {} | {} | Time: {}s | DNF",
+                result.finish_position,
+                result.driver_name,
+                result.team_name,
+                result.finish_time_seconds
+            );
+        } else {
+            println!(
+                "P{}: {} | {} | Time: {}s",
+                result.finish_position,
+                result.driver_name,
+                result.team_name,
+                result.finish_time_seconds
+            );
+        }
+    }
+
+    // Q1 results (positions 16-20)
+    println!("\n--- Eliminated in Q1 ---");
+    for result in results.iter().skip(15) {
+        if result.dnf {
+            println!(
+                "P{}: {} | {} | Time: {}s | DNF",
+                result.finish_position,
+                result.driver_name,
+                result.team_name,
+                result.finish_time_seconds
+            );
+        } else {
+            println!(
+                "P{}: {} | {} | Time: {}s",
+                result.finish_position,
+                result.driver_name,
+                result.team_name,
+                result.finish_time_seconds
+            );
+        }
+    }
+}
+
+fn race_weekend_summary(results: &Vec<RaceResult>) {
     println!("\n🏁 Race Weekend Summary 🏁");
     for result in results {
         println!(
