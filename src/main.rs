@@ -74,23 +74,19 @@ impl Driver {
         )
     }
 
-    /// Calculates overall driver rating based on skill, experience, aggression, and consistency.
+    /// Calculates overall driver rating percentage based on skill, experience, aggression, and consistency.
     fn overall_rating(&self) -> f32 {
-        let random_number = rand::thread_rng().gen_range(0.0..1.0);
-
-        let total = self.skill_level as f32 * random_number
-            + self.experience_level as f32 * random_number
-            + self.consistency_level as f32 * random_number
-            + self.aggression_level as f32 * random_number;
-
-        total
+        (self.skill_level as f32
+            + self.experience_level as f32
+            + self.consistency_level as f32
+            + self.aggression_level as f32)
+            / 100.0
     }
 
     /// Calculates a simulated lap time based on driver rating and car performance.
     fn simulated_lap_time(&self, car: &Car) -> f32 {
         let base_time = 90.0; // base time in seconds
         let driver_factor = 1.0 - self.overall_rating() / 100.0;
-
         let car_factor = 1.0 - (car.overall_performance() / 100.0);
 
         base_time * (driver_factor + car_factor) / 2.0
