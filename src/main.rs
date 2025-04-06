@@ -86,7 +86,7 @@ impl Driver {
     /// Calculates a simulated lap time based on driver rating and car performance.
     fn simulated_lap_time(&self, car: &Car) -> f32 {
         let base_time = 90.0; // base time in seconds
-        let driver_factor = 1.0 - self.overall_rating() / 100.0;
+        let driver_factor = 1.0 - self.overall_rating();
         let car_factor = 1.0 - (car.overall_performance() / 100.0);
 
         base_time * (driver_factor + car_factor) / 2.0
@@ -136,7 +136,11 @@ impl Car {
             🔧 Reliability: {}
             🪂 Aerodynamics: {}
             ",
-            self.name, self.engine_power, self.tyre_management, self.reliability, self.aerodynamics
+            self.name,
+            self.engine_power,
+            self.tyre_management,
+            self.reliability,
+            self.aerodynamics
         )
     }
 
@@ -909,19 +913,20 @@ fn qualification_summary(results: &Vec<RaceResult>) {
         println!("\n{}", title);
 
         // Get the drivers for this section
-        let section_drivers = results.iter().skip(range.start).take(range.end - range.start);
+        let section_drivers = results
+            .iter()
+            .skip(range.start)
+            .take(range.end - range.start);
 
         // Print each driver's info
         for result in section_drivers {
-            let dnf_text = if result.dnf { " | DNF" } else { "" };
-
             println!(
                 "P{}: {} | {} | Time: {}s{}",
                 result.finish_position,
                 result.driver_name,
                 result.team_name,
                 result.finish_time_seconds,
-                dnf_text
+                if result.dnf { " | DNF" } else { "" }
             );
         }
     }
@@ -929,6 +934,7 @@ fn qualification_summary(results: &Vec<RaceResult>) {
 
 fn race_weekend_summary(results: &Vec<RaceResult>) {
     println!("\n🏁 Race Weekend Summary 🏁");
+
     for result in results {
         println!(
             "Driver: {} | Team: {} | Position: {} | Time: {}s | DNF: {}",
