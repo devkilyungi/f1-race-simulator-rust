@@ -1,5 +1,4 @@
-use crate::car::Car;
-use crate::driver::Driver;
+use crate::models::{Car, Driver};
 
 #[derive(Debug, Clone)]
 pub struct Team {

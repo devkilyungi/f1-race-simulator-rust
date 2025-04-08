@@ -1,7 +1,4 @@
-use crate::car::Car;
-use crate::driver::Driver;
-use crate::race_result::RaceResult;
-use crate::team::Team;
+use crate::models::{Car, Driver, RaceResult, Team};
 use rand::Rng;
 
 pub fn create_drivers() -> Vec<Driver> {
@@ -455,7 +452,7 @@ pub fn simulate_practice_session(
     cars: &Vec<(String, Car)>,
     session_name: &str,
 ) -> Vec<RaceResult> {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let mut results = Vec::new();
 
     for driver in drivers {
@@ -466,7 +463,7 @@ pub fn simulate_practice_session(
             .unwrap(); // Unwrapping because we assume the car is found
 
         // Simulate session time based on skill, car attributes, and random variation
-        let time_variation = rng.gen_range(-1.5..1.5); // Random variation for practice times
+        let time_variation = rng.random_range(-1.5..1.5); // Random variation for practice times
         let driver_performance = (driver.skill_level as f32 * 0.4)
             + (car.engine_power as f32 * 0.3)
             + (car.tyre_management as f32 * 0.2)
@@ -496,7 +493,7 @@ pub fn simulate_practice_session(
 }
 
 pub fn simulate_qualification(drivers: &Vec<Driver>, cars: &Vec<(String, Car)>) -> Vec<RaceResult> {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let mut results = Vec::new();
 
     // Sorting drivers based on their performance and random qualifying factors
@@ -510,7 +507,7 @@ pub fn simulate_qualification(drivers: &Vec<Driver>, cars: &Vec<(String, Car)>) 
         // Similar to the practice, but qualification might have less randomness and more focus on car performance
         let qualifying_time = (driver.skill_level as f32 * 0.5)
             + (car.engine_power as f32 * 0.4)
-            + rng.gen_range(-0.5..0.5);
+            + rng.random_range(-0.5..0.5);
 
         results.push(RaceResult {
             driver_name: driver.full_name.clone(),
@@ -540,7 +537,7 @@ pub fn simulate_qualification(drivers: &Vec<Driver>, cars: &Vec<(String, Car)>) 
 }
 
 pub fn simulate_race(drivers: &Vec<Driver>, cars: &Vec<(String, Car)>) -> Vec<RaceResult> {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let mut results = Vec::new();
 
     for driver in drivers {
@@ -555,7 +552,7 @@ pub fn simulate_race(drivers: &Vec<Driver>, cars: &Vec<(String, Car)>) -> Vec<Ra
             + (car.engine_power as f32 * 0.3)
             + (car.tyre_management as f32 * 0.2)
             + (car.reliability as f32 * 0.1)
-            + rng.gen_range(-3.0..3.0); // Random race event variance
+            + rng.random_range(-3.0..3.0); // Random race event variance
 
         let race_time = 120.0 - race_performance; // Race time based on performance
 
@@ -564,7 +561,7 @@ pub fn simulate_race(drivers: &Vec<Driver>, cars: &Vec<(String, Car)>) -> Vec<Ra
             team_name: driver.team_name.clone(),
             finish_position: 0, // Position will be determined after sorting
             finish_time_seconds: race_time.round() as u8,
-            dnf: rng.gen_bool(0.1), // 10% chance of DNF
+            dnf: rng.random_bool(0.1), // 10% chance of DNF
         });
 
         println!(

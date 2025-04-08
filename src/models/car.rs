@@ -43,7 +43,7 @@ impl Car {
     }
 
     pub fn overall_performance(&self) -> f32 {
-        let random_number = rand::thread_rng().gen_range(0.0..1.0);
+        let random_number = rand::rng().random_range(0.0..1.0);
 
         self.engine_power as f32 * random_number
             + self.aerodynamics as f32 * random_number

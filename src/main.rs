@@ -1,19 +1,12 @@
-mod driver;
-mod team;
-mod car;
-mod race_result;
 mod utils;
+mod models;
 
-use car::Car;
-use driver::Driver;
-use rand::Rng;
-use team::Team;
 use utils::*;
 
 fn main() {
-    let drivers: Vec<Driver> = create_drivers();
-    let cars: Vec<(String, Car)> = create_cars();
-    let teams: Vec<Team> = create_teams(&drivers, &cars);
+    let drivers: Vec<models::Driver> = create_drivers();
+    let cars: Vec<(String, models::Car)> = create_cars();
+    let teams: Vec<models::Team> = create_teams(&drivers, &cars);
 
     println!();
     println!("{:#?}", teams);

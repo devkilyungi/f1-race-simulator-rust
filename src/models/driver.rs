@@ -1,4 +1,4 @@
-use crate::car::Car;
+use crate::models::Car;
 
 #[derive(Debug, Clone)]
 pub struct Driver {
